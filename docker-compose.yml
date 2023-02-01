@@ -1,0 +1,42 @@
+version: '3.0'
+name: nest-postgres
+services:
+  server:
+    container_name: nest
+    build:
+      dockerfile: ./Dockerfile.prod
+    env_file:
+      - .production.env
+    volumes:
+      - images:/dist/static
+    ports:
+      - 82:8000
+    depends_on:
+      - postgres
+    restart: always
+  postgres:
+    container_name: postgres
+    image: postgres:15-alpine
+    env_file:
+      - .production.env
+    environment:
+      - PG_DATA=/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  pgdata:
+    driver: local
+    driver_opts:
+      o: 'size=100m,uid=1000'
+      device: tmpfs
+      type: tmpfs
+  images:
+    driver: local
+    driver_opts:
+      o: 'size=100m,uid=1000'
+      device: tmpfs
+      type: tmpfs
