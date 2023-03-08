@@ -11,15 +11,25 @@ const start = async () => {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Nest Postgres Swagger Docker Learning')
+    .setTitle('Nest Postgres')
     .setDescription('REST API documentation')
     .setVersion('1.0.0')
-    .addTag('by Devid Corsard')
+    .setContact(
+      'Devid Corsard',
+      'https://github.com/devid-corsard',
+      'truegrinde@gmail.com'
+    )
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('/api/docs', app, document);
+  SwaggerModule.setup('/api/docs', app, document, {
+    swaggerOptions: {
+      tagsSorter: 'alpha',
+      // operationsSorter: 'alpha',
+    },
+  });
 
   // app.useGlobalGuards(ThrottlerGuard);
   app.useGlobalPipes(new ValidationPipe());

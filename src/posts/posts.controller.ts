@@ -31,6 +31,7 @@ export class PostsController {
           new MaxFileSizeValidator({ maxSize: 2 * 1024 * 1024 }),
           new FileTypeValidator({ fileType: 'image/jpeg' }),
         ],
+        fileIsRequired: false,
       })
     )
     image
