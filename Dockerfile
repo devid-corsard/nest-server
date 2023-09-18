@@ -4,7 +4,7 @@
 
 FROM node:16-alpine As development
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY --chown=node:node package*.json ./
 
@@ -20,11 +20,11 @@ USER node
 
 FROM node:16-alpine As build
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY --chown=node:node package*.json ./
 
-COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=development /app/node_modules ./node_modules
 
 COPY --chown=node:node . .
 
@@ -32,7 +32,7 @@ RUN npm run build
 
 ENV NODE_ENV production
 
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 USER node
 
@@ -42,7 +42,8 @@ USER node
 
 FROM node:16-alpine As production
 
-COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+COPY --chown=node:node --from=build /app/node_modules ./node_modules
+COPY --chown=node:node --from=build /app/dist ./dist
+COPY --chown=node:node --from=build /app/static ./static
 
-CMD [ "node", "dist/main.js" ]
+ENTRYPOINT [ "node", "dist/main.js" ]

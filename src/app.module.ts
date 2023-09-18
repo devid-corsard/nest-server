@@ -18,7 +18,7 @@ import { APP_GUARD } from '@nestjs/core';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.${process.env.NODE_ENV}.env`,
+      envFilePath: '.env',
     }),
     ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, '..', 'static'),
@@ -28,7 +28,7 @@ import { APP_GUARD } from '@nestjs/core';
       host: process.env.POSTGRES_HOST,
       port: Number(process.env.POSTGRES_PORT),
       username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
+      password: process.env.POSTGRES_PW,
       database: process.env.POSTGRES_DB,
       models: [User, Role, UserRoles, Post],
       autoLoadModels: true,

@@ -1,0 +1,35 @@
+services:
+  postgres:
+    container_name: ${POSTGRES_HOST}
+    image: postgres:15
+    volumes:
+      - type: bind
+        source: ~/db_data/nest
+        target: /var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+      - POSTGRES_DB=${POSTGRES_DB}
+    restart: always
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nest_server:
+    container_name: nest
+    build:
+      context: .
+      target: production
+    env_file:
+      - .env
+    ports:
+      - 8880:8000
+    networks:
+      - default
+    depends_on:
+      postgres:
+        condition: service_healthy
