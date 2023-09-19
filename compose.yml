@@ -1,7 +1,7 @@
 services:
   postgres:
     container_name: ${POSTGRES_HOST}
-    image: postgres:15
+    image: postgres:15-apline
     volumes:
       - type: bind
         source: ~/db_data/nest
@@ -11,8 +11,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PW}
       - POSTGRES_DB=${POSTGRES_DB}
     restart: always
-    networks:
-      - default
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
@@ -30,6 +28,13 @@ services:
       - 8880:8000
     networks:
       - default
+      - nginx-for-all
     depends_on:
       postgres:
         condition: service_healthy
+          
+networks:
+  nginx:
+    name: nginx-for-all
+    external: true
+
