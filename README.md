@@ -1,5 +1,8 @@
-## Some test server with nestjs, postgress, docker, swagger documentation
+### Test server with nestjs, postgress, docker and swagger documentation
 
-### link:
-
-http://34.207.90.158:82/api/docs
+#### Live at:
+https://nestjs.devidcorsard.pp.ua/
+#### Project purposes:
+- get in touch with Nest.js framework;
+- try typescript;
+- create interactive documentation with Swagger;
