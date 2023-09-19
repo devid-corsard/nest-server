@@ -1,7 +1,7 @@
 services:
   postgres:
     container_name: ${POSTGRES_HOST}
-    image: postgres:15-apline
+    image: postgres:15-alpine
     volumes:
       - type: bind
         source: ~/db_data/nest
@@ -28,7 +28,7 @@ services:
       - 8880:8000
     networks:
       - default
-      - nginx-for-all
+      - nginx
     depends_on:
       postgres:
         condition: service_healthy
